@@ -40,4 +40,15 @@ function sweep(req, res) {
 
 router.get('/sweep', sweep);
 
+/*
+function runProgram(req, res) {
+    console.log('body: ' + req.body);
+    console.log('running program:\n' + JSON.stringify(req.body));
+    plotter.execute(req.body.program);
+    res.send('ok');
+}
+router.post('/runProgram', runProgram);
+*/
+plotter.setup();
+
 module.exports = router;

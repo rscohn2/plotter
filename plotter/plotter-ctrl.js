@@ -33,6 +33,7 @@ var servos = {upDown:
                          max: 1900,
                          home: 'min'
                      }};
+plotter.servos = servos;
 var upDown = servos['upDown'];
 var inOut = servos['inOut'];
 var leftRight = servos['leftRight'];
@@ -54,12 +55,16 @@ function sweep(servoName) {
 }
 
 function sweepAll() {
+    run = true;
+    doSweep();
+}
+function doSweep() {
     if (!run)
         return;
     homeAll();
     setTimeout(function() {
         awayAll();
-        setTimeout(sweepAll, 2000);
+        setTimeout(doSweep, 2000);
     }, 1000);
 }
 
@@ -122,8 +127,9 @@ function setRun() {
     run = true;
 }
 plotter.run = setRun;
+plotter.setup = setup;
 
-setup();
+
 /*
 setup();
 //sweep('upDown');
