@@ -4,10 +4,11 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var errorHandler = require('errorhandler');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var plotter = require('./routes/plotter');
+var plotter = require('./routes/plotter-cmds');
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//app.use(errorHandler({ dumpExceptions: true, showStack: true }));
 
 app.use('/', routes);
 app.use('/users', users);
