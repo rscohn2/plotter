@@ -1,5 +1,6 @@
 var servos = require('./servos').servos;
 var plotter = require('./plotter-ctrl');
+var async = require('async');
 
 var draw = {};
 
@@ -17,22 +18,23 @@ function log(mess) {
     console.log(mess);
 }
 
-function servoSet(servo, n) {
+function servoSet(servo, n, cb) {
     log(' set servo ' + servo.channel + ' to ' + n);
-    plotter.servo.move(servo.channel, n, 3000);
+    plotter.servo.move(servo.channel, n, 3000, cb);
+    //if (cb) cb();
 }
 
-function setPos(servo, n) {
-    servoSet(servo, mapPos(servo, n));
+function setPos(servo, n, cb) {
+    servoSet(servo, mapPos(servo, n), cb);
 }
     
-function moveto(command) {
+function moveto(command, cb) {
     console.log('moveto: ' + command.x + ' ' + command.y);
     setPos(servos.leftRight, command.x);
-    setPos(servos.inOut, command.y);
+    setPos(servos.inOut, command.y, cb);
 }
 
-function executeCommand(command) {
+function executeCommand(command, cb) {
     if (command.x)
         command.x = parseInt(command.x);
     if (command.y)
@@ -41,7 +43,7 @@ function executeCommand(command) {
     console.log('Executing: ' + JSON.stringify(command));
     switch(command.action) {
         case 'moveto':
-            moveto(command);
+            moveto(command, cb);
             break;
         default:
             console.log('Unkown action: ' + command.action);
@@ -49,8 +51,9 @@ function executeCommand(command) {
     }
 }
 
-function executeProgram(program) {
-    program.forEach(executeCommand);
+function executeProgram(program, cb) {
+    async.mapSeries(program, executeCommand, cb);
+    //program.forEach(executeCommand);
 }
 draw.executeProgram = executeProgram;
 

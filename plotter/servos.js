@@ -9,13 +9,13 @@ module.exports.servos = {upDown:
                      {
                          channel: 1,
                          min: 1100,
-                         max: 1900,
+                         max: 1800,
                          home: 'min'
                      },
                      leftRight: 
                      {
                          channel: 2,
                          min: 1000,
-                         max: 1900,
+                         max: 1800,
                          home: 'min'
                      }};
