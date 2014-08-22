@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var plotter = require('../plotter/plotter-ctrl');
+var draw = require('../plotter/draw');
 
 
 /* stop the plotter */
@@ -40,15 +41,15 @@ function sweep(req, res) {
 
 router.get('/sweep', sweep);
 
-/*
+
 function runProgram(req, res) {
     console.log('body: ' + req.body);
     console.log('running program:\n' + JSON.stringify(req.body));
-    plotter.execute(req.body.program);
+    draw.executeProgram(req.body.program);
     res.send('ok');
 }
 router.post('/runProgram', runProgram);
-*/
+
 plotter.setup();
 
 module.exports = router;
