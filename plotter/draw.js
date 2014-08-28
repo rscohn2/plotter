@@ -34,6 +34,14 @@ function moveto(command, cb) {
     setPos(servos.inOut, command.y, cb);
 }
 
+function up(command, cb) {
+    servoSet(servos.upDown, 1, cb);
+}
+
+function down(command, cb) {
+    servoSet(servos.upDown, 0, cb);
+}
+
 function executeCommand(command, cb) {
     if (command.x)
         command.x = parseInt(command.x);
@@ -45,6 +53,12 @@ function executeCommand(command, cb) {
         case 'moveto':
             moveto(command, cb);
             break;
+        case 'up':
+            up(command, cb);
+            break;
+        case 'down':
+            down(command, cb);
+            break;
         default:
             console.log('Unkown action: ' + command.action);
             break;
@@ -52,7 +66,11 @@ function executeCommand(command, cb) {
 }
 
 function executeProgram(program, cb) {
-    async.mapSeries(program, executeCommand, cb);
+    plotter.homeAll();
+    async.mapSeries(program, executeCommand, function() {
+        plotter.homeAll();
+        if (cb) cb();
+    });
     //program.forEach(executeCommand);
 }
 draw.executeProgram = executeProgram;
